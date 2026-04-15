@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"context"
 	"net/http"
 
 	"condlink/database"
@@ -11,51 +12,22 @@ import (
 
 func Register(c *gin.Context) {
 	var user models.User
-	c.BindJSON(&user)
+
+	if err := c.BindJSON(&user); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Erro nos dados"})
+		return
+	}
 
 	user.Active = false
 	user.Role = "morador"
 
-	database.DB.Create(&user)
+	collection := database.DB.Collection("users")
 
-	c.JSON(http.StatusOK, user)
-}
-
-func Login(c *gin.Context) {
-	var input models.User
-	var user models.User
-
-	c.BindJSON(&input)
-
-	database.DB.Where("email = ? AND password = ?", input.Email, input.Password).First(&user)
-
-	if user.ID == 0 {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Credenciais inválidas"})
+	_, err := collection.InsertOne(context.TODO(), user)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao salvar"})
 		return
 	}
-
-	if !user.Active {
-		c.JSON(http.StatusForbidden, gin.H{"error": "Usuário não aprovado"})
-		return
-	}
-
-	c.JSON(http.StatusOK, user)
-}
-
-func GetUsers(c *gin.Context) {
-	var users []models.User
-	database.DB.Find(&users)
-	c.JSON(http.StatusOK, users)
-}
-
-func ApproveUser(c *gin.Context) {
-	id := c.Param("id")
-
-	var user models.User
-	database.DB.First(&user, id)
-
-	user.Active = true
-	database.DB.Save(&user)
 
 	c.JSON(http.StatusOK, user)
 }

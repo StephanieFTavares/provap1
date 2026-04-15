@@ -1,15 +1,15 @@
 package main
 
 import (
-	"./database"
-	"./routes"
+	"condlink/database"
+	"condlink/routes"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	database.Connect()
+	database.ConnectMongo()
 
 	r := gin.Default()
 
