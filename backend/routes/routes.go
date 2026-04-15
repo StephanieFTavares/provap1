@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"github.com/StephanieFTavares/provap1/controllers"
-	"github.com/StephanieFTavares/provap1/middleware"
+	"../controllers"
+	"../middleware"
 
 	"github.com/gin-gonic/gin"
 )

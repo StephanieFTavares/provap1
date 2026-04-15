@@ -1,9 +1,9 @@
 package database
 
 import (
+	"condlink/models"
 	"log"
 
-	"github.com/StephanieFTavares/provap1/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )

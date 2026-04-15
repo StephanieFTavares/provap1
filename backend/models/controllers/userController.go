@@ -3,8 +3,8 @@ package controllers
 import (
 	"net/http"
 
-	"github.com/StephanieFTavares/provap1/database"
-	"github.com/StephanieFTavares/provap1/models"
+	"condlink/database"
+	"condlink/models"
 
 	"github.com/gin-gonic/gin"
 )
